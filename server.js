@@ -7,7 +7,10 @@ const app = express();
 app.use(express.json());
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+
+const upload = multer({
+    storage: storage
+});
 
 app.post("/analyze", upload.single("image"), (req, res) => {
 
@@ -35,12 +38,28 @@ app.post("/signup", (req, res) => {
 
 });
 
+app.post("/login", (req, res) => {
+
+    const { email, password } = req.body;
+
+    console.log(email, password);
+
+    res.json({
+        message: "Login successful"
+    });
+
+});
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/signup.html", (req, res) => {
     res.sendFile(path.join(__dirname, "signup.html"));
+});
+
+app.get("/login.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "login.html"));
 });
 
 const PORT = process.env.PORT || 5000;
