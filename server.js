@@ -1,14 +1,15 @@
-const express = require('express');
-const multer = require('multer');
-const cors = require('cors');
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
 
 const app = express();
 
-app.use(cors());
+app.use(express.json());
 
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-app.post('/analyze', upload.single('image'), (req, res) => {
+app.post("/analyze", upload.single("image"), (req, res) => {
 
     res.json({
         message: "Image received successfully",
@@ -18,8 +19,28 @@ app.post('/analyze', upload.single('image'), (req, res) => {
 
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+app.post("/signup", (req, res) => {
+
+    const { name, email, password } = req.body;
+
+    console.log(name, email, password);
+
+    res.json({
+        message: "Signup successful",
+        user: {
+            name,
+            email
+        }
+    });
+
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+
+app.get("/signup.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "signup.html"));
 });
 
 const PORT = process.env.PORT || 5000;
