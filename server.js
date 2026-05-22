@@ -1,24 +1,14 @@
-const express = require("express");
-const multer = require("multer");
-const cors = require("cors");
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
 
 const app = express();
 
 app.use(cors());
 
-const storage = multer.memoryStorage();
+const upload = multer({ dest: 'uploads/' });
 
-const upload = multer({
-    storage: storage
-});
-
-app.post("/analyze", upload.single("image"), (req, res) => {
-
-    if (!req.file) {
-        return res.json({
-            message: "No image uploaded"
-        });
-    }
+app.post('/analyze', upload.single('image'), (req, res) => {
 
     res.json({
         message: "Image received successfully",
@@ -28,6 +18,12 @@ app.post("/analyze", upload.single("image"), (req, res) => {
 
 });
 
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
-}); console.log("update");
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log("Server running on port " + PORT);
+});
